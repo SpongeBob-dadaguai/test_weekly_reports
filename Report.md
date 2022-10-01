@@ -2,11 +2,19 @@
 
 ​	首先查看虚拟机地址：
 
-​			虚拟机终端输入：	ifconfig
+​			虚拟机终端输入：	
+
+```
+					ifconfig
+```
 
 ​	再打开主机的终端，
 
-​								输入：	ssh [用户名]@+ip地址
+​								输入：	
+
+```
+					ssh [用户名]@+ip地址
+```
 
 ​	再输入密码即可连接
 
@@ -14,9 +22,11 @@
 
 ​	生成公钥和私钥：
 
-​	ssh -keygen
+```
+ssh -keygen
+```
 
-运行上述命令会生成两个文件 id_rsa（私钥）、id_rsa.pub（公钥）
+运行上述命令会生成两个文件 id_rsa（[私钥](https://so.csdn.net/so/search?q=私钥&spm=1001.2101.3001.7020)）、id_rsa.pub（公钥）
 
 将公钥拷贝到要免密登录的机器上（虚拟机）的authorized_keys文件下：
 
@@ -24,12 +34,16 @@
 
 上述配置已经可以实现在本地终端免密登录，但是Vscode的Remote-ssh还需配置.ssh文件夹下的config文件
 
+```
 Host lxinyi
   HostName 192.168.91.128
   User lxinyi
   IdentityFile "C:\Users\lxiny\.ssh\id_rsa"
+```
 
-**这里犯了一个非常大的错误，把Host和HostName设置反了，浪费了一个小时都没连接上虚拟机**，IdentityFile就是本地密钥的地址
+**这里犯了一个非常大的错误，把Host和HostName设置反了，浪费了一个小时都没连接上虚拟机**
+
+IdentityFile就是本地密钥的地址
 
 配置完上述文件后，直接打开Vscode的Remote-ssh即可连接到虚拟机了
 
@@ -68,10 +82,15 @@ Host lxinyi
 
 #### 多程序编译
 
+```
 gcc test1.c test2.c -o test
+```
 
 #### 程序检错
 
+```
 gcc -Wall test.c -o test
 或者
 gcc -Werror test.c -o test
+```
+
