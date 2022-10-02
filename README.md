@@ -18,7 +18,7 @@ Week 1
 
   Have a basic understanding of the implementation of Echo Server, including some necessary data structures. 
 
-  Reviewed C syntax and Yong, and spent more time learning about GCC compilation. 
+  Reviewed C syntax, and spent more time learning about GCC compilation.
 
   Learned the basic operation of linux, and operate in the linux environment, in-depth study of the operation of git, so far learned the part of merge.
 

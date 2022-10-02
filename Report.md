@@ -94,3 +94,76 @@ gcc -Wall test.c -o test
 gcc -Werror test.c -o test
 ```
 
+#### Echo Server 实现过程
+
+##### 服务端（server）
+
+​	1.socket()函数创建sockfd（socket描述符）
+
+​	2.bind()函数将sockfd（套接字）bind到指定的IP和Port
+
+​	3.listen()函数将sockfd从主动转为被动监听模式
+
+​	4.accept()函数接收客户端的连接
+
+​	5.recv()/send()接发收数据
+
+​	6.close()函数关闭socket连接
+
+##### 客户端（client）
+
+​	1.socket()函数创建sockfd（socket描述符）
+
+​	2.connect()函数向服务端发起连接请求
+
+​	3.send()/recv()接发收数据
+
+​	4.close()关闭socket连接
+
+#### Linux基本操作命令
+
+rm 删除文件 （rm -rf +目录 可强制递归删除该目录下所有文件）
+
+ls 查看当前目录下的文件
+
+cp 复制文件到指定路径，例如：
+
+```
+cp Readme.md ./test_weekly_reports
+```
+
+就是把Readme.md文件复制到当前路径的子文件夹test_weekly_reports中
+
+mkdir 创建新的文件夹
+
+rmdir 删除空的文件夹
+
+mv 移动文件/目录或者重命名文件/目录，例如：
+
+```
+mv file_2.txt file_3.txt file_4.txt /home/office/
+mv directory_1/ directory_2/
+```
+
+​	分别代表移动文件和重命名目录
+
+touch 新建空文件（也可以使用vim a.txt建立，不过此时直接退出不保存不会创建空文件）
+
+cat 显示文件内容
+
+find/locate find可以在指定目录查找文件，locate功能更强大一些，可以找到某些文件存在什么地方
+
+pwd 显示当前目录的绝对路径
+
+#### Git基本操作
+
+```
+git init //初始化仓库，生成配置文件.git
+git add  //track the file
+git commit -m "additional message" //将文件添加到index区(即暂存区)
+git clone  //克隆远程仓库
+git push //用于从将本地的分支版本上传到远程并合并
+git pull //更新本地仓库没有的但是远程仓库有的文件
+git remote // 管理远端仓库列表
+```
+
