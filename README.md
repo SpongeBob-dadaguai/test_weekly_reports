@@ -25,7 +25,7 @@ about 18 hours
 ###### Learning progress: 
 
 ```c
-Install the virtual machine based on Ubuntu, and realized the operation of connecting the host to the virtual machine, including the remote-SSH of Vscode, setting the public key, and realizing the secret free login. 
+Install the virtual machine based on Ubantu, and realized the operation of connecting the host to the virtual machine, including the remote-SSH of Vscode, setting the public key, and realizing the secret free login. 
 
 ​Have a basic understanding of the implementation of Echo Server, including some necessary data structures. 
 
