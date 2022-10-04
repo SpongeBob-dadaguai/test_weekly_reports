@@ -18,40 +18,40 @@ int main(int argc, char** argv)
     struct sockaddr_in serveraddr;
     memset(&serveraddr, 0 ,sizeof(serveraddr));
     serveraddr.sin_family = AF_INET;
-    serveraddr.sin_port = htons(atoi(argv[2])); //server`s port
+    serveraddr.sin_port = htons(8000); //server`s port
     serveraddr.sin_addr.s_addr = inet_addr(argv[1]); //server`s IP
 
     int connectfd = connect(sockfd, (struct sockaddr*)&serveraddr, sizeof(serveraddr));
 
     if(connectfd != 0) {
-        printf("connect error!\n");
+        printf("connecting error!\n");
         close(sockfd);
         return -1;
     }
-
+    printf("connecting success\n");
     char MSG[1024];
     while(1) {
         memset(MSG, 0, sizeof(MSG));
+        printf("please input your message\n");
+        scanf("%s", MSG);
+
+        if (send(sockfd,MSG,strlen(MSG),0) <= 0) { // send message to server
+            printf("sending error"); 
+            break; 
+        }
+        printf("send: %s\n", MSG);
+        printf("waiting for server's reply\n");
+        memset(MSG, 0, sizeof(MSG));
+        if ( (recv(sockfd,MSG,sizeof(MSG),0))<=0) {// receive server's reply 
+            printf("recieve error\n"); 
+            break;
+        }
+        printf("server's reply: %s\n", MSG);
         printf("continue to send message?yes or no\n");
         char choice[64];
         scanf("%s", choice);
         if(strcmp(choice, "no") == 0 || strcmp(choice, "NO") == 0 || strcmp(choice, "No") == 0) {
             break;
         }
-        printf("please input your message\n");
-        scanf("%s", MSG);
-
-        if ( send(sockfd,MSG,strlen(MSG),0) <= 0) { // send message to server
-            printf("sending error"); 
-            break; 
-        }
-        printf("send: %s\n", MSG);
-        printf("waiting for server`s reply\n");
-        memset(MSG,0,sizeof(MSG));
-        if ( (recv(sockfd,MSG,sizeof(MSG),0))<=0) {// receive server's reply 
-            printf("recieve error\n"); 
-            break;
-        }
-        printf("server`s reply: %s\n", MSG);
     }
 }
