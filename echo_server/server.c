@@ -11,6 +11,10 @@
 
 int main(int argc, char **argv) 
 {
+    if(argc < 3) {
+        printf("Usage: %s <IP> <Port>", argv[0]);
+        return -1;
+    }
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);  //create the sockfd
     if(sockfd == -1) {
         printf("error creating socket!\n");
@@ -20,8 +24,8 @@ int main(int argc, char **argv)
     struct sockaddr_in server_addr;
     memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-    server_addr.sin_port = htons(8000);
+    server_addr.sin_addr.s_addr = inet_addr(argv[1]);
+    server_addr.sin_port = htons(atoi(argv[2]));
     
     if(bind(sockfd, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1)  {
         printf("bind error\n");
@@ -50,29 +54,27 @@ int main(int argc, char **argv)
     }
     else {
         
-        printf("connect with client: %s\n", inet_ntoa(client_addr.sin_addr));
+        printf("connect with client: %s\n\n", inet_ntoa(client_addr.sin_addr));
     }
 
-    char buffer[1024];
-    while (1)
-    {
-    int iret;
-    memset(buffer,0,sizeof(buffer));
-    iret=recv(clientfd,buffer,sizeof(buffer),0);
-    if (iret<=0) 
-    {
-       printf("iret=%d\n",iret); break;  
+    char MSG[1024];
+    while(1) {
+        memset(MSG, 0, sizeof(MSG));
+        int sign = recv(clientfd, MSG, sizeof(MSG), 0);
+        if(sign <= 0) {
+            printf("Receiving interrupt\n");
+            break;
+        }
+        printf("receive from server: %s\n", MSG);
+
+        memset(MSG, 0, sizeof(MSG));
+        strcpy(MSG, "Hi, I'm SpongeBob-dadaguai!");
+        if((sign = send(clientfd, MSG, sizeof(MSG), 0)) <= 0) {
+            perror("send");
+            break;
+        }
+        printf("send: %s\n\n", MSG);
     }
-    printf("receive :%s\n",buffer);
- 
-    strcpy(buffer,"ok");//reply cilent with "ok"
-    if ( (iret=send(clientfd,buffer,strlen(buffer),0))<=0) 
-    { 
-        perror("send"); 
-        break; 
-    }
-    printf("send :%s\n",buffer);
-  }
 
     return 0;
 
