@@ -22,8 +22,8 @@ int main(int argc, char** argv)
     struct sockaddr_in serveraddr;
     memset(&serveraddr, 0 ,sizeof(serveraddr));
     serveraddr.sin_family = AF_INET;
-    serveraddr.sin_port = htons(atoi(argv[2])); //server`s port
-    serveraddr.sin_addr.s_addr = inet_addr(argv[1]); //server`s IP
+    serveraddr.sin_port = htons(atoi(argv[2])); //server's port
+    serveraddr.sin_addr.s_addr = inet_addr(argv[1]); //server's IP
 
     int connectfd = connect(sockfd, (struct sockaddr*)&serveraddr, sizeof(serveraddr));
 
@@ -51,7 +51,7 @@ int main(int argc, char** argv)
             break;
         }
         printf("server's reply: %s\n", MSG);
-        printf("\ncontinue to send message?yes or no\n");
+        printf("\ncontinue to send message?yes or no\n");  //ask the client whether to continue or not
         char choice[64];
         scanf("%s", choice);
         if(strcmp(choice, "no") == 0 || strcmp(choice, "NO") == 0 || strcmp(choice, "No") == 0) {
