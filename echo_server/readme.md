@@ -6,11 +6,8 @@
 
 ##### The sample:
 
-![server](echo_server/image/client端.png)
+![server](https://raw.githubusercontent.com/SpongeBob-dadaguai/test_weekly_reports/main/echo_server/image/server%E7%AB%AF.png)
 
-![client](echo_server/image/client端.png)
+![client](https://raw.githubusercontent.com/SpongeBob-dadaguai/test_weekly_reports/main/echo_server/image/client%E7%AB%AF.png)
 
-![合并样式](echo_server/image/合并样式.png)
-
-
-
+![合并样式](https://github.com/SpongeBob-dadaguai/test_weekly_reports/blob/main/echo_server/image/合并样式.png)
