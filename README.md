@@ -64,3 +64,44 @@ Realize echo server using C language.
 ​Learn the knowledge of computer network and continue to be familiar with linux commands.
 ```
 
+#### Week 2
+
+##### Learning hours: 
+
+```
+about 15 hours
+```
+
+
+
+##### Learning progress:
+
+```
+Implemented echo server in C language under linux system, including single thread, multi-thread and I/O multiplexing, among which I/O multiplexing includes select, poll (select without the maximum number of fd) and epoll (the most efficient I/O operation).
+```
+
+
+
+##### My implementation of the tasks you have done this week:
+
+```
+My learning process is updated in the Report.md file.
+```
+
+
+
+##### Unsolved problems:
+
+```
+None
+```
+
+
+
+##### Plan for the next week:
+
+```
+learing the ref 《Computer network》.
+learing more about linux.
+```
+

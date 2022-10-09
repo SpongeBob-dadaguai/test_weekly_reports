@@ -167,3 +167,102 @@ git pull //更新本地仓库没有的但是远程仓库有的文件
 git remote // 管理远端仓库列表
 ```
 
+#### 本周遇到的问题以及解决方式(印象比较深的错误)
+
+##### 1.读取字符串的时候，首先采用了scanf("%s",msg);的方式，但是发现遇到空白符号，例如空格，就是输入“who are you”的时候，scanf只会将who读到msg中，其他的字符则存储在缓冲区，这时我就打算使用gets进行读取，但是linux已经禁止这种危险的方式，最后我学习到了scanf("%[^n]", msg)的方式，可以选择结束符号，这种方式就可以解决读入的问题了，但是这个方式会将\n存储在缓冲区，需要使用getchar()将这个缓冲区字符读出。
+
+##### 2.先贴一段代码：
+
+```c
+for(int i = 0; i < 5; i++) {
+	printf("%d ", i);
+	sleep(1);
+}
+```
+
+###### 我认为这段代码执行结果应该是从0到4打印，每两个数之间的打印时间间隔为1s，总耗时5s，但是结果却是，等待了5s之后，所有数字一起打印，这时候我感觉很奇怪，感觉逻辑上没有问题，但是结果不对。我首先想到了缓冲区的问题，是不是字符全部在缓冲区，没有打印出来，因此我将上面的代码修改为：
+
+```c
+for(int i = 0; i < 5; i++) {
+	printf("%d ", i);
+	fflush(stdout);  //强行将缓冲区的字符打印到终端
+	sleep(1);
+}
+```
+
+###### 这时候的代码运行结果与预想的一样，间隔一秒打印一个数字。
+
+###### 究其原因：发现linux系统的printf会将所有需要打印到终端的数据存入缓冲区，只有遇到换行符的时候才会打印到终端，但是上面的代码printf("%d ", i) 没有换行符，所以会一直等到程序结束才打印。
+
+###### 那么解决方式就有：
+
+```c
+1.printf("%d\n", i);  //添加换行符
+
+2.fflsuh(stdout); //刷新缓冲区
+
+3.setvbuf(stdout, NULL, _IONBF, 0); //禁用缓冲区
+```
+
+#### 本周主要学习过程：
+
+##### Linux系统下的多线程：
+
+###### 	在我学习并实现echo server的时候，发现并不能实现多个客户端同时连接到一个服务器，而且客户端一旦连接到服务器，服务器就要一直等待客户端传输数据，无法进行其他操作，但是Linux的多线程处理就可以解决这个问题。
+
+###### 	首先，我对于多线程的理解，就是将服务器或者本地资源分配到多个同时进行的操作，或者说，将每一个线程简单理解为一个函数，这些函数不再像单线程那样要一个一个执行，而是同时进行操作，最大限度地利用资源，减少时间。至于echo server的多线程实现方式，我采用的是链表的结构，每当有一个新的客户端链接进来，新增链表节点，并将这个客户端的线程分出去，main主程序线程不受客户端线程的影响，而且我将main线程的终止程序放到单独的线程——quit，让main线程等待quit线程结束之后再结束，就是说，可以随时输入终止命令结束main线程，下面是一些函数：
+
+```c
+pthread_t new_thread;  //创建一个线程结构体
+int pthread_create(pthread_t *thread, const pthread_attr_t *attr,
+                          void *(*start_routine) (void *), void *arg);
+//创建一个新的线程，第一个参数是类型为pthread_t的变量的地址，第二个参数是创建线程的属性，一般来说不用修改，设置为NULL即可，第三个参数是该线程要执行的函数，第四个参数就是函数的参数
+int pthread_detach(pthread_t thread)  //将线程分离出来
+int pthread_join(pthread_t thread, void **retval)  //将thread线程加入到当前线程，即当前线程需要等待thread线程结束之后才能运行thread之后的部分，第二个参数是thread结束后的返回值
+int pthread_exit(void **retval) //结束当前进程
+int pthread_equal(pthread_t t1, pthread_t t2);//判断两个线程是否相同
+pthread_t pthread_self(void) //返回当前线程的ID
+```
+
+##### Linux I/O复用：
+
+###### select
+
+###### 优点：操作简单，对于小规模的用户连接较为方便；
+
+###### 缺点：连接数量受限，一般是1024个，而且每次查找活跃的客户端时，都需要循环遍历，时间耗费非常大
+
+```c
+fd_set fds;  //创建文件描述符集合
+FD_ZERO(fd_set *fdset);     // 清除fdset所有标志位   
+FD_SET(int fd, fd_set fdset);       // 设置fdset标志位fd   
+FD_CLR(int fd, fd_set fdset);       // 清除fdset标志位fd   
+int FD_ISSET(int fd, fd_set *fdset);    // 判断fdset的位fd是否被设置
+```
+###### poll
+
+###### poll的实现原理和select类似，不过不限制文件描述符的个数
+```c
+struct pollfd  
+{  
+    int fd;         // 文件描述符  
+    short events;       // 注册的事件   
+    short revents;      // 实际发生的事件，有内核填充  
+};  
+int poll(struct pollfd *fds, nfds_t nfds, int timeout); //返回活跃的文件描述符的个数
+```
+
+##### epoll
+###### epoll与poll以及select有很大的区别，在客户端数量非常多的情况下，epoll的处理效率非常高，主要是因为，epoll只关心活跃的文件描述符
+
+```c
+int epoll_create(int size)
+// epoll把用户关心的文件描述符上的事件放在内核上的一个事件表中，从而无须像select和poll那样每次调用都要重复传入文件描述符集合事件表。但epoll需要使用一个额外的文件描述符，来唯一标识内核中这个事件表，这个文件描述符使用如下epoll_create函数创建：
+
+int epoll_ctl(int opfd, int op, int fd, struct epoll_event *event);
+//对内核的事件表进行操作，其中op是操作方式，包括：
+// EPOLL_CTL_ADD 添加文件描述符
+// EPOLL_CTL_MOD 修改事件表上的事件，比如将输入EPOLLIN改为输出EPOLLOUT
+// EPOLL_STL_DEL 删除事件表上的事件
+int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout);  
+//返回活跃的文件描述符个数，后面就只用关心这些文件描述符，从而节省遍历的时间
