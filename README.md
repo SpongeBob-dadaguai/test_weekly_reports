@@ -101,7 +101,40 @@ None
 ##### Plan for the next week:
 
 ```
-learing the ref 《Computer network》.
-learing more about linux.
+learning the ref 《Computer network》.
+learning more about linux.
 ```
 
+##### Week 3
+
+###### Learning hours: 
+```
+about 8 hours,most of time I was writing my expeimental report
+```
+
+
+##### Learning progress:
+```
+Install and configure the Vim code completion plug-in YouCompleteMe.
+Familiar with the basic commands of linux.
+Learned a little bit about computer network.
+```
+
+##### My implementation of the tasks you have done this week:
+
+```
+My learning process is updated in the Report.md file.
+```
+
+##### Unsolved problems:
+
+```
+None
+```
+
+##### Plan for the next week:
+
+```
+Learning the ref 《Computer network》.
+Learning more about linux.
+```

@@ -204,7 +204,7 @@ for(int i = 0; i < 5; i++) {
 3.setvbuf(stdout, NULL, _IONBF, 0); //禁用缓冲区
 ```
 
-#### 本周主要学习过程：
+#### Week 2主要学习过程：
 
 ##### Linux系统下的多线程：
 
@@ -266,3 +266,70 @@ int epoll_ctl(int opfd, int op, int fd, struct epoll_event *event);
 // EPOLL_STL_DEL 删除事件表上的事件
 int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout);  
 //返回活跃的文件描述符个数，后面就只用关心这些文件描述符，从而节省遍历的时间
+```
+
+#### Week 3主要学习过程：
+
+##### YCM的安装与配置
+
+###### 安装依赖软件：
+  安装git、vim、python、cmake、gcc等依赖工具;
+###### 安装Vundle：
+  相当于是插件管理工具，这里在命令行输入以下内容：
+  ``` c
+  cd ~/.vim/bundle/Vundle.vim //切换到安装的目标目录下
+  git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim  //拉取远程代码
+  //这里得益于校园网的速度，我没有遇到下载速度很慢的情况
+  ```
+
+  之后就要配置.vimrc并打开vim安装Vundle
+
+  ``` c
+  vim ~/.vimrc //打开vim配置文件，然后将Github上面的配置文件复制进去
+  //打开vim，输入以下内容安装Vundle
+  :PluginInstall
+  ```
+
+###### 安装YCM
+  首先下载YCM资源包，输入以下命令：
+```c
+cd ~/.vim/bundle
+git clone https://github.com/Valloric/YouCompleteMe.git
+```
+  再获取最新版本的相关依赖软件：
+``` c
+cd ~/.vim/bundle/YouCompleteMe
+git submodule update --init --recursive
+```
+  再编译一下：
+  ``` c 
+  ./install.py --clang-completer  //支持c/c++ 
+  ```
+  最后需要再打开.vimrc文件，添加以下内容：
+  ``` c
+  call vundle#begin()
+  Plugin 'Valloric/YouCompleteMe'
+  call vundle#end()
+  ```
+  之后所有安装的插件都需要添加在begin()和end()之间，并且打开vim，输入
+  ``` c
+  :PluginTnstall
+  ```
+
+  至于YCM的配置，就不写在这里了。
+
+  在这个过程中遇到的小问题：
+  1.我的虚拟机安装了py，倒是编译的时候找不到，然后我更新了py的版本为3.7就可以了；
+  2.NoExtraConfDetected:No .ycm_extra_conf.py file detected
+  出现该问题的原因是：缺少YCM的配置文件 .ycm_extra_conf.py，添加该配置文件之后，运行即可。
+
+##### 一丢丢的计算机网络
+
+###### IP地址
+  IP地址是用来唯一标识IP网络中的每台设备的所在位置，IP地址有两部分组成：一是网络ID：标识网络，每个网段分配一个网络ID；主机ID：标识单个主机，由组织分配给各设备；IPv4地址格式：X.X.X.X，每个X的取值范围为0~255。
+###### 子网掩码
+  这里要看IP地址的组成，网络位+主机位，而局域网通信规则回顶只有同一网段内的IP才可以互相通信，而怎么确定IP地址的网络位就是子网掩码的功能，具体怎么确定网络位的方法就是：于子网掩码中的255数字对应的数字为网络位，与0对应的就是主机位。
+
+###### DNS
+  Domain Name Service域名服务器，用户使用浏览器访问网页时，浏览器首先查找本地缓存，然后找本地解析文件，最后求助DNS服务器，DNS服务器放在公网即互联网上。
+  
